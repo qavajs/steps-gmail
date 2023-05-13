@@ -1,5 +1,5 @@
 # @qavajs/steps-gmail
-Step library to test email via gmail client
+Step library to test emails via gmail client
 
 ## Installation
 
