@@ -4,6 +4,9 @@ import { google, Auth } from 'googleapis';
 import { waitFor } from './waitFor';
 import { simpleParser } from 'mailparser';
 
+declare global {
+  var config: any;
+}
 let auth: Auth.OAuth2Client;
 
 function validateClient() {
@@ -30,8 +33,8 @@ When('I log in to gmail as {string}', async function (credentialsKey: string) {
 When('I wait email matching {string}', async function (searchQuery: string) {
   validateClient();
   const timeoutConfig = {
-    timeout: (global as any).config.gmail?.timeout ?? 30000,
-    interval: (global as any).config.gmail?.interval ?? 5000,
+    timeout: config.gmail?.timeout ?? 30000,
+    interval: config.gmail?.interval ?? 5000,
   };
   const q: string = await memory.getValue(searchQuery);
   const gmail = google.gmail({ version: 'v1', auth });
