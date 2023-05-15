@@ -3,7 +3,7 @@ name: Test
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -17,6 +17,8 @@ jobs:
       - run: npm run build
       - run: npm run test
       - run: npm run test:e2e
+        env:
+          GMAIL_KEY: ${{ secrets.GMAIL_KEY }}
       - name: junit report
         uses: mikepenz/action-junit-report@v3
         if: always()

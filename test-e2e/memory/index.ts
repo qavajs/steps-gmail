@@ -7,5 +7,5 @@ export default class Memory {
   };
 
   timestamp = () => Math.floor(Date.now() / 1000);
-  user = JSON.parse(process.env.GMAIL_KEY);
+  user = JSON.parse(process.env.GMAIL_KEY as string);
 }
