@@ -7,6 +7,7 @@ import { simpleParser } from 'mailparser';
 declare global {
   var config: any;
 }
+
 let auth: Auth.OAuth2Client;
 
 function validateClient() {
@@ -15,7 +16,13 @@ function validateClient() {
 
 /**
  * Login to gmail
- * @param {string} credentialsKey - memory key that resolves to Gmail auth object
+ * @param {string} credentialsKey - memory key that resolves to Gmail auth object (google.auth.fromJSON)
+ * {
+ *     "type": "authorized_user",
+ *     "client_id": "client_id",
+ *     "client_secret": "client_secret",
+ *     "refresh_token": "refresh_token"
+ * }
  * @example
  * When I log in to gmail as '$gmailUser'
  */
