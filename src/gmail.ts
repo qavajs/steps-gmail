@@ -58,7 +58,7 @@ When('I wait email matching {string}', async function (searchQuery: string) {
  * Save email matching advanced search syntax query to memory as https://nodemailer.com/extras/mailparser/ object
  * If query returns multiple message only first one will be saved.
  * @param {string} searchQuery - advanced search syntax query https://support.google.com/mail/answer/7190
- * @param {string} memoryKet - memory key to save email
+ * @param {string} memoryKey - memory key to save email
  * @example
  * When I save email matching 'subject:some subject' as 'email'
  * Then I expect '$email.subject' to equal 'some subject'
