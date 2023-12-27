@@ -1,6 +1,6 @@
 {
   "name": "@qavajs/steps-gmail",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "gmail steps for @qavajs project",
   "main": "./index.js",
   "scripts": {
