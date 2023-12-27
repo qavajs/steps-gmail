@@ -10,8 +10,6 @@ jest.mock('@cucumber/cucumber', () => ({
 }));
 
 test('import steps', () => {
-  const importer = () => {
-    return import('../index.js');
-  };
+  const importer = () => import('../index.js');
   expect(importer).not.toThrow();
 });
