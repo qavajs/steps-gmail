@@ -5,7 +5,7 @@
   "main": "./index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint:write": "npm run pretty && eslint ./ --fix",
     "pretty": "prettier --write ./",
     "test:e2e": "qavajs run --config test-e2e/gmail.ts",
