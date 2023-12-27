@@ -14,7 +14,7 @@ export async function waitFor(fn: Function, { interval = 500, timeout = 5000 }):
         }
       } catch (err) {
         clearInterval(waitInterval);
-        reject(new Error(`function throw err: ${err}`));
+        reject(err);
       }
     }, interval);
   });
