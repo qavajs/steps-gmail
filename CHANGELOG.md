@@ -7,9 +7,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 :rocket: - new feature
 :beetle: - bugfix
 :x: - deprecation
+## [0.2.1]
+- :beetle: fix duplicated gmail client logging
 
-## [0.0.2]
-- :rocket: Added _I {gmailAction} {string} label to email(s) matching {string}_ step 
+## [0.2.0]
+- :rocket: Added _I {gmailAction} {string} label to email(s) matching {string}_ step
 
 ## [0.0.1]
 - :rocket: initial implementation
