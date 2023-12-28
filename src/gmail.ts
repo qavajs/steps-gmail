@@ -9,8 +9,9 @@ declare global {
 }
 
 async function getAuth(): Promise<Auth.OAuth2Client> {
-  if (!(await memory.getValue('$gmailAuth'))) throw new Error("Gmail client is not set.\nMake sure you called 'I log in to gmail as {string}' step");
-  return memory.getValue('$gmailAuth') as Auth.OAuth2Client;
+  const client = await memory.getValue('$gmailAuth');
+  if (!client) throw new Error("Gmail client is not set.\nMake sure you called 'I log in to gmail as {string}' step");
+  return client;
 }
 
 /**
