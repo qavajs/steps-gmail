@@ -8,11 +8,8 @@ declare global {
   var config: any;
 }
 
-async function validateClient() {
+async function getAuth(): Promise<Auth.OAuth2Client> {
   if (!(await memory.getValue('$gmailAuth'))) throw new Error("Gmail client is not set.\nMake sure you called 'I log in to gmail as {string}' step");
-}
-
-function getAuth(): Auth.OAuth2Client {
   return memory.getValue('$gmailAuth') as Auth.OAuth2Client;
 }
 
@@ -41,13 +38,13 @@ When('I log in to gmail as {string}', async function (credentialsKey: string) {
  * When I wait email matching 'subject:some subject'
  */
 When('I wait email matching {string}', async function (searchQuery: string) {
-  await validateClient();
+  const auth = await getAuth();
   const timeoutConfig = {
     timeout: config.gmail?.timeout ?? 30000,
     interval: config.gmail?.interval ?? 5000,
   };
   const q: string = await memory.getValue(searchQuery);
-  const gmail = google.gmail({ version: 'v1', auth: getAuth() });
+  const gmail = google.gmail({ version: 'v1', auth });
   await waitFor(async () => {
     const res = await gmail.users.messages.list({
       userId: 'me',
@@ -67,9 +64,9 @@ When('I wait email matching {string}', async function (searchQuery: string) {
  * Then I expect '$email.subject' to equal 'some subject'
  */
 When('I save email matching {string} as {string}', async function (searchQueryKey: string, memoryKey: string) {
-  await validateClient();
+  const auth = await getAuth();
   const q: string = await memory.getValue(searchQueryKey);
-  const gmail = google.gmail({ version: 'v1', auth: getAuth() });
+  const gmail = google.gmail({ version: 'v1', auth });
   const res = await gmail.users.messages.list({ userId: 'me', q });
   const emailId = res.data.messages && res.data.messages[0];
   if (!emailId) throw new Error('Email is not found');
@@ -93,9 +90,9 @@ When('I save email matching {string} as {string}', async function (searchQueryKe
  * Then I add "TRASH" label to emails matching 'is:read'
  */
 When('I {gmailAction} {string} label to email(s) matching {string}', async function (action: string, label: string, searchQuery: string) {
-  await validateClient();
+  const auth = await getAuth();
   const q: string = await memory.getValue(searchQuery);
-  const gmail = google.gmail({ version: 'v1', auth: getAuth() });
+  const gmail = google.gmail({ version: 'v1', auth });
   const res = await gmail.users.messages.list({ userId: 'me', q });
   const emailId = res.data.messages && res.data.messages[0];
   if (!emailId) throw new Error('Email is not found');
