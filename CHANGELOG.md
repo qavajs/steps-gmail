@@ -7,6 +7,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 :rocket: - new feature
 :beetle: - bugfix
 :x: - deprecation
+
+## [1.0.0]
+- :rocket: added v1 implementation
+
 ## [0.2.1]
 - :beetle: fix duplicated gmail client logging
 
