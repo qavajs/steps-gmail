@@ -1,6 +1,6 @@
 {
   "name": "@qavajs/steps-gmail",
-  "version": "0.2.1",
+  "version": "2.0.0",
   "description": "gmail steps for @qavajs project",
   "main": "./index.js",
   "scripts": {
@@ -35,10 +35,9 @@
   },
   "homepage": "https://github.com/qavajs/steps-api#readme",
   "devDependencies": {
-    "@cucumber/cucumber": "^10.1.0",
-    "@qavajs/cli": "^0.33.0",
+    "@cucumber/cucumber": "^11.0.1",
+    "@qavajs/core": "^2.1.1",
     "@qavajs/console-formatter": "^0.6.0",
-    "@qavajs/memory": "^1.6.2",
     "@qavajs/xunit-formatter": "^0.0.4",
     "@qavajs/html-formatter": "^0.15.3",
     "@types/chai": "^4.3.11",
@@ -62,7 +61,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "googleapis": "^129.0.0",
+    "googleapis": "^144.0.0",
     "mailparser": "^3.6.5"
   }
 }

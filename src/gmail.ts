@@ -1,15 +1,11 @@
-import memory from '@qavajs/memory';
-import { defineParameterType, When } from '@cucumber/cucumber';
+import { defineParameterType, IWorld, When } from '@cucumber/cucumber';
 import { google, Auth } from 'googleapis';
 import { simpleParser } from 'mailparser';
+import { type MemoryValue } from '@qavajs/core';
 import { waitFor } from './waitFor';
 
-declare global {
-  var config: any;
-}
-
-async function getAuth(): Promise<Auth.OAuth2Client> {
-  const client = await memory.getValue('$gmailAuth');
+async function getAuth(context: IWorld): Promise<Auth.OAuth2Client> {
+  const client = await context.getValue('$gmailAuth');
   if (!client) throw new Error("Gmail client is not set.\nMake sure you called 'I log in to gmail as {string}' step");
   return client;
 }
@@ -26,10 +22,10 @@ async function getAuth(): Promise<Auth.OAuth2Client> {
  * @example
  * When I log in to gmail as '$gmailUser'
  */
-When('I log in to gmail as {string}', async function (credentialsKey: string) {
-  const credentials = await memory.getValue(credentialsKey);
-  const value = await google.auth.fromJSON(credentials);
-  memory.setValue('gmailAuth', value);
+When('I log in to gmail as {value}', async function (credentialsKey: MemoryValue) {
+  const credentials = await credentialsKey.value();
+  const value = google.auth.fromJSON(credentials);
+  this.setValue('gmailAuth', value);
 });
 
 /**
@@ -38,13 +34,13 @@ When('I log in to gmail as {string}', async function (credentialsKey: string) {
  * @example
  * When I wait email matching 'subject:some subject'
  */
-When('I wait email matching {string}', async function (searchQuery: string) {
-  const auth = await getAuth();
+When('I wait email matching {value}', async function (searchQuery: MemoryValue) {
+  const auth = await getAuth(this);
   const timeoutConfig = {
-    timeout: config.gmail?.timeout ?? 30000,
-    interval: config.gmail?.interval ?? 5000,
+    timeout: this.config.gmail?.timeout ?? 30000,
+    interval: this.config.gmail?.interval ?? 5000,
   };
-  const q: string = await memory.getValue(searchQuery);
+  const q: string = await searchQuery.value();
   const gmail = google.gmail({ version: 'v1', auth });
   await waitFor(async () => {
     const res = await gmail.users.messages.list({
@@ -64,9 +60,9 @@ When('I wait email matching {string}', async function (searchQuery: string) {
  * When I save email matching 'subject:some subject' as 'email'
  * Then I expect '$email.subject' to equal 'some subject'
  */
-When('I save email matching {string} as {string}', async function (searchQueryKey: string, memoryKey: string) {
-  const auth = await getAuth();
-  const q: string = await memory.getValue(searchQueryKey);
+When('I save email matching {value} as {value}', async function (searchQueryKey: MemoryValue, memoryKey: MemoryValue) {
+  const auth = await getAuth(this);
+  const q: string = await searchQueryKey.value();
   const gmail = google.gmail({ version: 'v1', auth });
   const res = await gmail.users.messages.list({ userId: 'me', q });
   const emailId = res.data.messages && res.data.messages[0];
@@ -77,7 +73,7 @@ When('I save email matching {string} as {string}', async function (searchQueryKe
     format: 'RAW',
   });
   const email = await simpleParser(Buffer.from(emailRaw.data.raw as string, 'base64'));
-  memory.setValue(memoryKey, email);
+  memoryKey.set(email);
 });
 
 /**
@@ -90,9 +86,9 @@ When('I save email matching {string} as {string}', async function (searchQueryKe
  * When I remove "UNREAD" label to email matching 'is:unread'
  * Then I add "TRASH" label to emails matching 'is:read'
  */
-When('I {gmailAction} {string} label to email(s) matching {string}', async function (action: string, label: string, searchQuery: string) {
-  const auth = await getAuth();
-  const q: string = await memory.getValue(searchQuery);
+When('I {gmailAction} {string} label to email(s) matching {value}', async function (action: string, label: string, searchQuery: MemoryValue) {
+  const auth = await getAuth(this);
+  const q: string = await searchQuery.value();
   const gmail = google.gmail({ version: 'v1', auth });
   const res = await gmail.users.messages.list({ userId: 'me', q });
   const emailId = res.data.messages && res.data.messages[0];
